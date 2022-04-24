@@ -1,6 +1,6 @@
 Config = {}
 
-Config.UseTarget = GetConvar('UseTarget', 'false') == 'false'
+Config.UseTarget = GetConvar('UseTarget', 'false') == 'true'
 
 Config.MinimalDoctors = 2
 Config.WipeInventoryOnRespawn = true
@@ -23,7 +23,7 @@ Config.Locations = {
         [2] = vector4(-475.43, 5988.353, 31.716, 31.34), -- paleto NOT DONE
     },
     ["armory"] = {
-        [1] = vector3(304.58, -600.35, 43.28), -- Done
+        [1] = vector3(306.14, -601.61, 43.28), -- Done
         [2] = vector3(-245.13, 6315.71, 32.82), -- paleto NOT DONE
     },
     ["roof"] = {
@@ -33,10 +33,9 @@ Config.Locations = {
         [1] = vector3(327.2, -603.81, 1242.28), -- put up into the sky cause fuck it
     },
     ["stash"] = {
-        [1] = vector3(306.85, -601.85, 43.28), -- Need to test
+        [1] = vector3(307.37, -602.07, 43.28), -- Need to test
     },
     ["beds"] = {
-        [1] = {coords = vector4(324.26, -582.77, 44.2, 158.15), taken = false, model = 1631638868},
         [2] = {coords = vector4(322.59, -587.32, 44.2, 336.72), taken = false, model = 1631638868},
         [3] = {coords = vector4(319.33, -581.15, 44.2, 158.61), taken = false, model = 1631638868},
         [4] = {coords = vector4(317.67, -585.24, 44.2, 338.29), taken = false, model = 1631638868},
@@ -44,11 +43,10 @@ Config.Locations = {
         [6] = {coords = vector4(313.81, -579.04, 44.2, 156.64), taken = false, model = 1631638868}, 
         [7] = {coords = vector4(311.12, -582.9, 44.2, 338.82), taken = false, model = 1631638868}, 
         [8] = {coords = vector4(309.33, -577.3, 44.2, 158.98), taken = false, model = 1631638868},
-        [9] = {coords = vector4(307.63, -581.9, 44.2, 336.67), taken = false, model = 1631638868},
         -- paleto NOT DONE
     },
     ["stations"] = {
-        [1] = {label = Lang:t('info.pb_hospital'), coords = vector4(304.27, -600.33, 43.28, 272.249)}
+        [1] = {label = Lang:t('info.pb_hospital'), coords = vector4(298.4, -584.28, 43.26, 69.27)}
     }
 }
 

@@ -10,7 +10,6 @@ local inHeli = false
 local onRoof = false
 local inMain = false
 
-
 -- Functions
 
 local function loadAnimDict(dict)
@@ -478,8 +477,9 @@ CreateThread(function()
     end
 end)
 
+
 -- Convar Turns into strings
-if Config.UseTarget == 'true' then
+if Config.UseTarget == true then
     CreateThread(function()
         for k, v in pairs(Config.Locations["duty"]) do
             exports['qb-target']:AddBoxZone("duty"..k, vector3(v.x, v.y, v.z), 1.5, 1, {
@@ -583,6 +583,7 @@ if Config.UseTarget == 'true' then
         end
     end)
 else
+    print("UseTarget False")
     CreateThread(function()
         local signPoly = {}
         for k, v in pairs(Config.Locations["duty"]) do

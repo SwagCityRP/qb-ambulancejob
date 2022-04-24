@@ -523,6 +523,36 @@ end
 
 -- Events
 
+RegisterNetEvent("Hospital:CheckIn")
+    AddEventHandler("Hospital:CheckIn", function()
+        if QBCore ~= nil then
+            local pos = GetEntityCoords(PlayerPedId())
+            
+        if doctorCount >= Config.MinimalDoctors then
+            TriggerServerEvent("hospital:server:SendDoctorAlert")
+        else
+            TriggerEvent('animations:client:EmoteCommandStart', {"notepad"})
+            QBCore.Functions.Progressbar("hospital_checkin", "Checking in..", 2000, false, true, {
+                disableMovement = true,
+                disableCarMovement = true,
+                disableMouse = false,
+                disableCombat = true,
+            }, {}, {}, {}, function() -- Done
+                TriggerEvent('animations:client:EmoteCommandStart', {"c"})
+                local bedId = GetAvailableBed()
+                if bedId ~= nil then 
+                    TriggerServerEvent("hospital:server:SendToBed", bedId, true)
+                    else
+                    QBCore.Functions.Notify("Beds are occupied..", "error")
+                end
+                end, function() -- Cancel
+                TriggerEvent('animations:client:EmoteCommandStart', {"c"})
+                QBCore.Functions.Notify("Checking in failed!", "error")
+            end)
+        end
+   end
+end)
+
 RegisterNetEvent('hospital:client:ambulanceAlert', function(coords, text)
     local street1, street2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
     local street1name = GetStreetNameFromHashKey(street1)
@@ -876,28 +906,8 @@ RegisterNetEvent('qb-ambulancejob:beds', function()
 end)
 
 -- Convar Turns into strings
-if Config.UseTarget == 'true' then
+if Config.UseTarget == true then
     CreateThread(function()
-        for k, v in pairs(Config.Locations["checking"]) do
-            exports['qb-target']:AddBoxZone("checking"..k, vector3(v.x, v.y, v.z), 3.5, 2, {
-                name = "checkin"..k,
-                heading = -72,
-                debugPoly = false,
-                minZ = v.z - 2,
-                maxZ = v.z + 2,
-            }, {
-                options = {
-                    {
-                        type = "client",
-                        icon = "fa fa-clipboard",
-                        event = "qb-ambulancejob:checkin",
-                        label = "Check In",
-                    }
-                },
-                distance = 1.5
-            })
-        end
-
         for k, v in pairs(Config.Locations["beds"]) do
             exports['qb-target']:AddBoxZone("beds"..k,  v.coords, 2.5, 2.3, {
                 name = "beds"..k,
@@ -920,33 +930,6 @@ if Config.UseTarget == 'true' then
     end)
 else
     CreateThread(function()
-        local checkingPoly = {}
-        for k, v in pairs(Config.Locations["checking"]) do
-            checkingPoly[#checkingPoly+1] = BoxZone:Create(vector3(v.x, v.y, v.z), 3.5, 2, {
-                heading = -72,
-                name="checkin"..k,
-                debugPoly = false,
-                minZ = v.z - 2,
-                maxZ = v.z + 2,
-            })
-            local checkingCombo = ComboZone:Create(checkingPoly, {name = "checkingCombo", debugPoly = false})
-            checkingCombo:onPlayerInOut(function(isPointInside)
-                if isPointInside then
-                    inCheckin = true
-                    if doctorCount >= Config.MinimalDoctors then
-                        exports['qb-core']:DrawText(Lang:t('text.call_doc'),'left')
-                        CheckInControls("checkin")
-                    else
-                        exports['qb-core']:DrawText(Lang:t('text.check_in'), 'left')
-                        CheckInControls("checkin")
-                    end
-                else
-                    inCheckin = false
-                    listen = false
-                    exports['qb-core']:HideText()
-                end
-            end)
-        end
         local bedPoly = {}
         for k, v in pairs(Config.Locations["beds"]) do
             bedPoly[#bedPoly+1] = BoxZone:Create(v.coords, 2.5, 2.3, {
